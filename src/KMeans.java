@@ -166,8 +166,8 @@ public class KMeans {
     /**
      * output: should replace every instance in Instances to the centroid to which it is closest to and return the new Instances object.
      *
-     * @param instances
-     * @return
+     * @param curinstances
+     * @return quantized instances
      */
     public Instances quantize(Instances curinstances) {
         //using the centroid allocation array we've created while creating the centroids, we will replace each instance according to the centroid it is
@@ -205,10 +205,8 @@ public class KMeans {
         return addSum;
     }
 
-    /**
-     * a simple setter for our K number for the model (num of centroids)
-     * @param k
-     */
+    // simple setters and getters to fields of the class used by the main
+
     public void setK(int k) {
         K = k;
     }

@@ -163,13 +163,6 @@ public class Hw7Main {
 
     }
 
-//    After running all of the necessary steps of the KMeans section we will run the PCA algorithm on the libras.txt data set. You should do this in the main method.
-//    We will run PCA many times, each time using a different number of principal components. So loop through
-//            (notice that the libras data set has 91 features initially, so using 91 principal components should be the exact recovery of the data)
-//    and do the following: run PCA on the instances and transform them back to the original space using principal components,
-//    measure the average Euclidean distance of the new data set from the original data set and print this average distance. An explanation of how to use the PCA algorithm provided is below under technical hints.
-//
-
     /**
      * calculate the euclidean distance between all instances of the transformed set and the original set of the PCA Libra
      * datset
