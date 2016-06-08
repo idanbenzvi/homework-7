@@ -1,12 +1,15 @@
 import weka.core.Instance;
 import weka.core.Instances;
 
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class KMeans {
 
     private final int K = 8;
-    private final int NUM_ITERATIONS = 100;
+    private final int NUM_ITERATIONS = 500;
     private double[][] centroids = new double[K][4]; // data structure to represent the centroids
     private int centroidAlloc[];
     private Instances centroidInstances;
@@ -37,21 +40,25 @@ public class KMeans {
     public Instances initializeCentroids(Instances instances) {
         //randomize the instances in the set in order to select K instances as initial centroids (also better in general)
         Random rand = new Random(12345);
-        //shuffles the instances according to the random seed provided above
-//        instances.randomize(rand);
 
-        
-        Instances centroidInstances = new Instances(instances, 0, K);
+        //randomly select K values in the range of our instances (in order to select K random instances as centroids)
+        Set<Integer> generated = new LinkedHashSet<Integer>();
+        while (generated.size() < K)
+        {
+            Integer next = rand.nextInt(instances.numInstances()) ;
+            // As we're adding to a set, this will automatically do a containment check - no duplicates ! :-)
+            generated.add(next);
+        }
 
-//        //also store centroids in our array structure for further calculations
-//        for (int i = 0; i < K; i++) {
-//            //get a random instance
-//            Instance currInst = instances.instance(i);
-//            //set centroid values using the selected instance
-//            for (int j = 0; j < 4; j++) {
-//                centroids[i][j] = currInst.value(j);
-//            }
-//        }
+        //create an empty instances object with capacity K
+        Instances centroidInstances = new Instances(instances, K);
+
+        //create an iterator and then assign centroid instances with the random generated values
+        Iterator randInstances = generated.iterator();
+
+        while(randInstances.hasNext()){
+            centroidInstances.add(instances.instance((int) randInstances.next()));
+        }
 
         return centroidInstances;
     }
