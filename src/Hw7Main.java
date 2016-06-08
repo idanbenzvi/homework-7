@@ -84,7 +84,7 @@ public class Hw7Main {
 
     public static void main(String[] args) throws Exception {
         //create instances object from image and quantize it using Kmeans
-        BufferedImage image = ImageIO.read(new File("baboon_face.jpg"));
+        BufferedImage image = ImageIO.read(new File("sunset.jpg"));
 
         //convert image to instances
         Instances imageInstances = convertImgToInstances(image);
@@ -96,7 +96,7 @@ public class Hw7Main {
         double bestError = Double.MAX_VALUE;
         //both are required in order to output the image
         Instances centroidInstances = null ;
-        int[] centroidAlloc = null ; 
+        int[] centroidAlloc = null ;
 
         for(int i = 0 ; i < K_VALUES.length ; i++) {
             //set the K num. of the model

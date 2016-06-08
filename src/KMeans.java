@@ -11,7 +11,7 @@ public class KMeans {
 
 
     public int K = 2;
-    private final int NUM_ITERATIONS = 500;
+    private final int NUM_ITERATIONS = 40;
     private int centroidAlloc[];
     private Instances centroidInstances;
 
