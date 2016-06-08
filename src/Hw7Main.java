@@ -9,6 +9,9 @@ import java.util.List;
 //import weka.filters.unsupervised.attribute.PrincipalComponents;
 
 public class Hw7Main {
+    //K values to test our model with
+    public static final int[] K_VALUES = {2,3,5,10,25,50,100,256};
+
     public static BufferedReader readDataFile(String filename) {
         BufferedReader inputReader = null;
 
@@ -88,7 +91,40 @@ public class Hw7Main {
 
         //run K-menas algorithm on the selected image file
         KMeans KmeansClassifier = new KMeans();
-        KmeansClassifier.buildClusterModel(imageInstances);
+
+        //save best error and instances associated with its quantization
+        double bestError = Double.MAX_VALUE;
+        //both are required in order to output the image
+        Instances centroidInstances = null ;
+        int[] centroidAlloc = null ; 
+
+        for(int i = 0 ; i < K_VALUES.length ; i++) {
+            //set the K num. of the model
+            KmeansClassifier.setK(K_VALUES[i]);
+            //build the centroids
+            KmeansClassifier.buildClusterModel(imageInstances);
+
+            //check error and if smaller than current minimum - save it
+            double curError = KmeansClassifier.calcAvgWSSSE(imageInstances);
+
+            //todo:remove after testing
+            System.out.println(curError);
+
+            //if current error is better than the previous best error
+            if(curError < bestError){
+                //save the centroidInstances and centroid allocations
+                centroidInstances = KmeansClassifier.getCentroidInstances();
+                centroidAlloc = KmeansClassifier.getCentroidAlloc();
+
+                //save the error
+                bestError = curError;
+            }
+        }
+
+        //quantize the result with the lowest error and output it to a jpg file
+        //first set the centroids instances and the centroid allocation table (for eah instance - its corresponding centroid)
+        KmeansClassifier.setCentroidAlloc(centroidAlloc);
+        KmeansClassifier.setCentroidInstances(centroidInstances);
 
         Instances quantizedInstances = KmeansClassifier.quantize(imageInstances);
         BufferedImage out = convertInstancesToImg(quantizedInstances,image.getWidth(),image.getHeight());

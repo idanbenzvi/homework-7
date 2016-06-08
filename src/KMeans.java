@@ -8,7 +8,9 @@ import java.util.Set;
 
 public class KMeans {
 
-    private final int K = 8;
+
+
+    public int K = 2;
     private final int NUM_ITERATIONS = 500;
     private int centroidAlloc[];
     private Instances centroidInstances;
@@ -201,5 +203,29 @@ public class KMeans {
         addSum = Math.sqrt(addSum);
 
         return addSum;
+    }
+
+    /**
+     * a simple setter for our K number for the model (num of centroids)
+     * @param k
+     */
+    public void setK(int k) {
+        K = k;
+    }
+
+    public int[] getCentroidAlloc() {
+        return centroidAlloc;
+    }
+
+    public Instances getCentroidInstances() {
+        return centroidInstances;
+    }
+
+    public void setCentroidAlloc(int[] centroidAlloc) {
+        this.centroidAlloc = centroidAlloc;
+    }
+
+    public void setCentroidInstances(Instances centroidInstances) {
+        this.centroidInstances = centroidInstances;
     }
 }
