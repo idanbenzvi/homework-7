@@ -92,7 +92,6 @@ public class Hw7Main {
         KmeansClassifier.buildClusterModel(imageInstances);
 
         Instances quantizedInstances = KmeansClassifier.quantize(imageInstances);
-
         BufferedImage out = convertInstancesToImg(quantizedInstances,image.getWidth(),image.getHeight());
 
         File outputfile = new File("output.jpg");

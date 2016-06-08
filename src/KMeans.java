@@ -6,7 +6,7 @@ import java.util.Random;
 public class KMeans {
 
     private final int K = 8;
-    private final int NUM_ITERATIONS = 40;
+    private final int NUM_ITERATIONS = 100;
     private double[][] centroids = new double[K][4]; // data structure to represent the centroids
     private int centroidAlloc[];
     private Instances centroidInstances;
@@ -24,9 +24,6 @@ public class KMeans {
 
         //run K-means algorithm
         findKMeansCentroids(instances);
-
-        //in general
-        //todo do everything to find the K clusters
     }
 
 
@@ -100,13 +97,12 @@ public class KMeans {
             }
 
             //now calculate the mean for each centroid (divide by the number of instances associated with it
-            for (int j = 0; j < K; j++) {
-                for (int i = 0; i < 4; i++) {
-                    System.out.println(instanceCountCentroid[j]);
-                    centroidMeans[j][i] /= instanceCountCentroid[j];
+            for (int i = 0; i < K; i++) {
+                for (int j = 0; j < 4; j++) {
+                    centroidMeans[i][j] /= instanceCountCentroid[i];
                     //All centroid means have been calculated - replace the centroid instance attribute values according to the new
                     //means calculated: each instance is a centroid, the values are the attribute values
-                    centroidInstances.instance(j).setValue(i, centroidMeans[j][i]);
+                    centroidInstances.instance(i).setValue(j, centroidMeans[i][j]);
                 }
             }
 
@@ -144,9 +140,11 @@ public class KMeans {
     public int findClosestCentroid(Instance instance) {
         //calculate distances
         double minDist = Double.MAX_VALUE;
+        double curDist = 0;
         int closestIndex = 0;
+
         for (int i = 0; i < K; i++) {
-            double curDist = calcSquaredDistance(instance, centroidInstances.instance(i));
+            curDist = calcSquaredDistance(instance, centroidInstances.instance(i));
             if (curDist < minDist) {
                 minDist = curDist;
                 closestIndex = i;
@@ -162,19 +160,19 @@ public class KMeans {
      * @param instances
      * @return
      */
-    public Instances quantize(Instances instances) {
+    public Instances quantize(Instances curinstances) {
         //using the centroid allocation array we've created while creating the centroids, we will replace each instance according to the centroid it is
         //assoicated with (using centroidInstances object we've created)
-        for(int i = 0 ; i < instances.numInstances() ; i++){
+        for(int i = 0 ; i < curinstances.numInstances() ; i++){
             for(int j = 0 ; j < 4 ; j++) {
                 //for each instance - replace it's values with those of the centroid affiliated with it
                 //specifically - for the instance i, find what centroid it is associated with via centroid instances field, and the centroid allocated to it
                 //then set the requires values
-                instances.instance(i).setValue(j,centroidInstances.instance(centroidAlloc[i]).value(j));
+                curinstances.instance(i).setValue(j,centroidInstances.instance(centroidAlloc[i]).value(j));
             }
         }
 
-        return instances;
+        return curinstances;
     }
 
 
