@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 //import weka.filters.unsupervised.attribute.PrincipalComponents;
 
@@ -107,20 +108,22 @@ public class Hw7Main {
         ArrayList<Double> pcaResult = new ArrayList<Double>();
 
         PrincipalComponents pca = new PrincipalComponents();
-        for(int i = 13 ; i < libras.numAttributes()-1 ; i++) {
+        for(int i = 13 ; i < libras.numAttributes() ; i++) {
             //calc the average distance of the instances from the original instances after the PCA performed over the original dataset has been transformed
             pca.setNumPrinComponents(i);
             pca.setTransformBackToOriginal(true);
             pca.buildEvaluator(libras);
             Instances data2 = pca.transformedData(libras);
-            double dist = calcAvgDistance(libras, data2);
+            double dist = calcAvgDistance(data2, libras);
 
             //output resulting distance to the systemout and retain results in a datastructuer later to be written to a file to be used
             //fro a an excel spreadsheet scatterplot
             System.out.println(dist);
             pcaResult.add(dist);
-
         }
+
+        //output the results from the array list to a csv file
+        writeToCSV(pcaResult,"PCAOutput.csv");
 
     }
 
@@ -144,14 +147,14 @@ public class Hw7Main {
 
         //iterate over all instances from the dataset
         for (int i = 0 ; i < instances.numInstances() ; i++) {
-
             double dist = 0;
 
             //calculate the distance
-            for (int j = 0; j < instances.numAttributes(); i++) {
+            for (int j = 0; j < originalSet.numAttributes(); j++) {
                 dist += Math.pow((instances.instance(i).value(j) - originalSet.instance(i).value(j)), 2);
             }
-            System.out.println(dist);
+
+            //calculate the sqare root of the distance
             distance += Math.sqrt(dist);
         }
 
@@ -176,4 +179,37 @@ public class Hw7Main {
         return data;
     }
 
+    /**
+     * function that outputs the arraylist with the PCA distances for 13 .. 90 principal components to a CSV
+     * @param csvInput
+     * @param fileName
+     * @throws IOException
+     */
+    private static void writeToCSV(ArrayList<Double> csvInput,String fileName) throws IOException{
+
+        FileWriter writer = new FileWriter(fileName);
+
+        //heading for the first column and the second column
+        writer.append("principal components");
+        writer.append(',');
+        writer.append("Average Distance");
+        writer.append('\n');
+
+        //first principle component number
+        int pnum = 13;
+
+        //go over all principal component distances as calculated by the PCA model and output them to CSV
+        for(int i = 0 ; i < csvInput.size(); i++){
+            writer.append(Integer.toString(pnum++));
+            writer.append(',');
+            writer.append(Double.toString(csvInput.get(i)));
+            writer.append(',');
+            writer.append('\n');
+        }
+
+        //close and cleanup
+        writer.flush();
+        writer.close();
+
+    }
 }
