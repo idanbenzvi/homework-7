@@ -38,8 +38,9 @@ public class KMeans {
         //randomize the instances in the set in order to select K instances as initial centroids (also better in general)
         Random rand = new Random(12345);
         //shuffles the instances according to the random seed provided above
-        instances.randomize(rand);
+//        instances.randomize(rand);
 
+        
         Instances centroidInstances = new Instances(instances, 0, K);
 
 //        //also store centroids in our array structure for further calculations
