@@ -42,15 +42,15 @@ public class KMeans {
 
         Instances centroidInstances = new Instances(instances, 0, K);
 
-        //also store centroids in our array structure for further calculations
-        for (int i = 0; i < K; i++) {
-            //get a random instance
-            Instance currInst = instances.get(i);
-            //set centroid values using the selected instance
-            for (int j = 0; j < 4; j++) {
-                centroids[i][j] = currInst.value(j);
-            }
-        }
+//        //also store centroids in our array structure for further calculations
+//        for (int i = 0; i < K; i++) {
+//            //get a random instance
+//            Instance currInst = instances.instance(i);
+//            //set centroid values using the selected instance
+//            for (int j = 0; j < 4; j++) {
+//                centroids[i][j] = currInst.value(j);
+//            }
+//        }
 
         return centroidInstances;
     }
