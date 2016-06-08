@@ -10,7 +10,6 @@ public class KMeans {
 
     private final int K = 8;
     private final int NUM_ITERATIONS = 500;
-    private double[][] centroids = new double[K][4]; // data structure to represent the centroids
     private int centroidAlloc[];
     private Instances centroidInstances;
 
@@ -90,7 +89,7 @@ public class KMeans {
             }
 
             //calculate the new mean of the centroid
-            int[][] centroidMeans = new int[K][4];
+            double[][] centroidMeans = new double[K][4];
 
             for (int i = 0; i < instances.numInstances(); i++) {
                 for (int j = 0; j < 4; j++) {
@@ -190,7 +189,17 @@ public class KMeans {
      * Return the double value of the WSSSE. This is the cost function learned in class.
      */
     public double calcAvgWSSSE(Instances instances) {
-        return 0;
-    }
 
+        //calculate the square root of
+        //the sum of squared distances of every instance from the closest centroid to it
+        double addSum = 0;
+
+        for (int i = 0; i < instances.numInstances() ; i++){
+            addSum += calcSquaredDistance(instances.instance(i),centroidInstances.instance(centroidAlloc[i]));
+        }
+
+        addSum = Math.sqrt(addSum);
+
+        return addSum;
+    }
 }

@@ -2,10 +2,8 @@ import weka.core.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
+import java.util.ArrayList;
 
 //import weka.filters.unsupervised.attribute.PrincipalComponents;
 
@@ -100,7 +98,82 @@ public class Hw7Main {
 
         //run PCA looping over number of principal components and print the average
         // distance of transformed instances from original instances
+        //run PCA from i = 13 .. 90
 
+        //read Libras dataset into an instances object
+        Instances libras = loadData("libras.txt");
+
+        //init. an arraylist later to be exported as csv file
+        ArrayList<Double> pcaResult = new ArrayList<Double>();
+
+        PrincipalComponents pca = new PrincipalComponents();
+        for(int i = 13 ; i < libras.numAttributes()-1 ; i++) {
+            //calc the average distance of the instances from the original instances after the PCA performed over the original dataset has been transformed
+            pca.setNumPrinComponents(i);
+            pca.setTransformBackToOriginal(true);
+            pca.buildEvaluator(libras);
+            Instances data2 = pca.transformedData(libras);
+            double dist = calcAvgDistance(libras, data2);
+
+            //output resulting distance to the systemout and retain results in a datastructuer later to be written to a file to be used
+            //fro a an excel spreadsheet scatterplot
+            System.out.println(dist);
+            pcaResult.add(dist);
+
+        }
+
+    }
+
+//    After running all of the necessary steps of the KMeans section we will run the PCA algorithm on the libras.txt data set. You should do this in the main method.
+//    We will run PCA many times, each time using a different number of principal components. So loop through
+//            (notice that the libras data set has 91 features initially, so using 91 principal components should be the exact recovery of the data)
+//    and do the following: run PCA on the instances and transform them back to the original space using principal components,
+//    measure the average Euclidean distance of the new data set from the original data set and print this average distance. An explanation of how to use the PCA algorithm provided is below under technical hints.
+//
+
+    /**
+     * calculate the euclidean distance between all instances of the transformed set and the original set of the PCA Libra
+     * datset
+     * @param instances
+     * @param originalSet
+     */
+    public static double calcAvgDistance(Instances instances,Instances originalSet){
+        //calculate the euclidean distance between every 2 corresponding instances
+
+        double distance = 0;
+
+        //iterate over all instances from the dataset
+        for (int i = 0 ; i < instances.numInstances() ; i++) {
+
+            double dist = 0;
+
+            //calculate the distance
+            for (int j = 0; j < instances.numAttributes(); i++) {
+                dist += Math.pow((instances.instance(i).value(j) - originalSet.instance(i).value(j)), 2);
+            }
+            System.out.println(dist);
+            distance += Math.sqrt(dist);
+        }
+
+        //calculate the mean by dividing the above result by the number of instances
+        distance /= instances.numInstances();
+
+    return distance;
+    }
+
+    //*** FILE HANDLING METHODS FOR DATASET LOADING ***
+
+
+    /**
+     * Load the data from the inputreader into an instances object
+     * @param fileName
+     * @return Instances data
+     * @throws IOException
+     */
+    public static Instances loadData(String fileName) throws IOException {
+        BufferedReader datafile = readDataFile(fileName);
+        Instances data = new Instances(datafile);
+        return data;
     }
 
 }
