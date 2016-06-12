@@ -14,6 +14,7 @@ public class KMeans {
     private final int NUM_ITERATIONS = 40;
     private int centroidAlloc[];
     private Instances centroidInstances;
+    private int[] instanceCountCentroid;
 
     /**
      * output: should initialize any parameters (therefore should call initializecentroids)
@@ -39,7 +40,7 @@ public class KMeans {
             //detect empty centroids
             for(int i = 0 ; i < K ; i++) {
                 //1 meaning only the centroid instance itself
-                if (centroidAlloc[i] == 1) {
+                if (instanceCountCentroid[i] == 1) {
                     emptyCentroid = true;
                     break;
                 }
@@ -101,7 +102,7 @@ public class KMeans {
         for (int itr = 0; itr < NUM_ITERATIONS; itr++) {
 
             //reset centroid instance counter variables
-            int[] instanceCountCentroid = new int[K];
+            instanceCountCentroid = new int[K];
 
             //find the closest centroid for each instance and save it in a temporary array
             for (int i = 0; i < instances.numInstances(); i++) {
