@@ -25,9 +25,29 @@ public class KMeans {
     public void buildClusterModel(Instances instances) {
         //initialize parameters
         this.centroidInstances = initializeCentroids(instances);
+        boolean emptyCentroid = true;
+
 
         //run K-means algorithm
-        findKMeansCentroids(instances);
+        //NOTE:
+        // in case an empty centroid is created in the process, repeat cluster building using different random centroid
+        //instances
+        while(emptyCentroid) {
+            //find K means centroids
+            findKMeansCentroids(instances);
+
+            //detect empty centroids
+            for(int i = 0 ; i < K ; i++) {
+                //1 meaning only the centroid instance itself
+                if (centroidAlloc[i] == 1) {
+                    emptyCentroid = true;
+                    break;
+                }
+
+                //if no empty centroid has been found - decalre as false - the process is successful!
+                emptyCentroid=false;
+            }
+        }
     }
 
 

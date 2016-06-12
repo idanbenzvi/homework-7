@@ -84,7 +84,7 @@ public class Hw7Main {
 
     public static void main(String[] args) throws Exception {
         //create instances object from image and quantize it using Kmeans
-        BufferedImage image = ImageIO.read(new File("sunset.jpg"));
+        BufferedImage image = ImageIO.read(new File("baboon_face.jpg"));
 
         //convert image to instances
         Instances imageInstances = convertImgToInstances(image);
@@ -106,9 +106,6 @@ public class Hw7Main {
 
             //check error and if smaller than current minimum - save it
             double curError = KmeansClassifier.calcAvgWSSSE(imageInstances);
-
-            //todo:remove after testing
-            System.out.println(curError);
 
             //if current error is better than the previous best error
             if(curError < bestError){
