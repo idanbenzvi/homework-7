@@ -221,7 +221,8 @@ public class KMeans {
             addSum += calcSquaredDistance(instances.instance(i),centroidInstances.instance(centroidAlloc[i]));
         }
 
-        addSum = Math.sqrt(addSum);
+        //calculate the average, as instructed in the Piazza post from 12/6
+        addSum /= instances.numInstances();
 
         return addSum;
     }

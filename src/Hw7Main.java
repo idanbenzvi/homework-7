@@ -92,8 +92,6 @@ public class Hw7Main {
         //run K-menas algorithm on the selected image file
         KMeans KmeansClassifier = new KMeans();
 
-        //save best error and instances associated with its quantization
-        double bestError = Double.MAX_VALUE;
         //both are required in order to output the image
         Instances centroidInstances = null ;
         int[] centroidAlloc = null ;
@@ -101,21 +99,13 @@ public class Hw7Main {
         for(int i = 0 ; i < K_VALUES.length ; i++) {
             //set the K num. of the model
             KmeansClassifier.setK(K_VALUES[i]);
+
             //build the centroids
             KmeansClassifier.buildClusterModel(imageInstances);
 
-            //check error and if smaller than current minimum - save it
-            double curError = KmeansClassifier.calcAvgWSSSE(imageInstances);
-
-            //if current error is better than the previous best error
-            if(curError < bestError){
-                //save the centroidInstances and centroid allocations
-                centroidInstances = KmeansClassifier.getCentroidInstances();
-                centroidAlloc = KmeansClassifier.getCentroidAlloc();
-
-                //save the error
-                bestError = curError;
-            }
+            //save the centroidInstances and centroid allocations
+            centroidInstances = KmeansClassifier.getCentroidInstances();
+            centroidAlloc = KmeansClassifier.getCentroidAlloc();
         }
 
         //quantize the result with the lowest error and output it to a jpg file
